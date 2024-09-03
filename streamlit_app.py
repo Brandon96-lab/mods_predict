@@ -4,19 +4,12 @@ import streamlit as st
 import joblib  
 import shap
 
-# Load the model and training data
+# Load the model
 @st.cache_resource
 def load_model():
     return joblib.load('gramtot_rf_model.joblib')
 
-@st.cache_data
-def load_training_data():
-    X_train = pd.read_csv('X_train.csv')
-    y_train = pd.read_csv('y_train.csv')
-    return X_train, y_train
-
 model = load_model()
-X_train, y_train = load_training_data()
 
 st.header("Prediction of Gram-Negative Sepsis in Trauma Patients")
 
