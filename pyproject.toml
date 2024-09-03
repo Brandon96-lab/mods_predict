@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mods predict"
+version = "0.1.0"
+description = "mods predict in trauma patients with sepsis"
+requires-python = ">=3.9,<3.10"
+
+[tool.setuptools]
+py-modules = []
