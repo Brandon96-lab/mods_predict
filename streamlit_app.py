@@ -1,9 +1,11 @@
+
 import numpy as np
 import pandas as pd
 import streamlit as st
 import joblib
 import shap
 import matplotlib.pyplot as plt
+import streamlit.components.v1 as components
 
 # Set page config
 st.set_page_config(page_title="MODS Prediction in Trauma Patients with Sepsis", page_icon="🏥", layout="wide")
@@ -82,7 +84,7 @@ with col1:
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(input_data)
             
-            # Create SHAP plots with updated feature names
+            # Create SHAP summary plot
             fig, ax = plt.subplots(figsize=(10, 6))
             shap.summary_plot(shap_values[1], input_data, plot_type="bar", show=False)
             ax.set_xlabel("SHAP Value (impact on model output)")
@@ -91,13 +93,12 @@ with col1:
             st.pyplot(fig)
             plt.close(fig)
 
-            fig, ax = plt.subplots(figsize=(10, 3))
-            shap.force_plot(explainer.expected_value[1], shap_values[1][0], input_data.iloc[0], matplotlib=True, show=False)
-            ax.set_title("SHAP Force Plot")
-            st.pyplot(fig)
-            plt.close(fig)
+            # Create SHAP force plot using JavaScript visualization
+            st.subheader("SHAP Force Plot")
+            shap_html = shap.force_plot(explainer.expected_value[1], shap_values[1][0], input_data.iloc[0], matplotlib=False, show=False)
+            components.html(shap_html.html(), height=300)
 
-# Disclaimer (moved to the bottom)
+# Disclaimer (at the bottom)
 st.markdown("---")
 st.warning("""
 **DISCLAIMER:**
