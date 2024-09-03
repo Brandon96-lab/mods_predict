@@ -84,7 +84,7 @@ with col1:
             shap_values = explainer.shap_values(input_data)
             
             # Create SHAP summary plot
-            fig, ax = plt.subplots(figsize=(10, 6))
+            fig, ax = plt.subplots(figsize=(10, 6), dpi=100)
             shap.summary_plot(shap_values[1], input_data, plot_type="bar", show=False)
             ax.set_xlabel("SHAP Value (impact on model output)")
             ax.set_ylabel("Feature")
@@ -92,11 +92,26 @@ with col1:
             st.pyplot(fig)
             plt.close(fig)
 
-            # Create static SHAP force plot
-            st.subheader("SHAP Force Plot")
-            fig, ax = plt.subplots(figsize=(12, 3))
-            shap.plots._waterfall.waterfall_legacy(explainer.expected_value[1], shap_values[1][0], feature_names=input_data.columns, max_display=10, show=False)
-            plt.title("SHAP Force Plot")
+            # Create improved SHAP visualization
+            st.subheader("SHAP Feature Impact")
+            
+            # Sort features by absolute SHAP value
+            feature_names = input_data.columns
+            feature_importance = np.abs(shap_values[1][0]).argsort()
+            
+            fig, ax = plt.subplots(figsize=(10, 6), dpi=100)
+            y_pos = np.arange(len(feature_names))
+            ax.barh(y_pos, shap_values[1][0][feature_importance], align='center')
+            ax.set_yticks(y_pos)
+            ax.set_yticklabels([feature_names[i] for i in feature_importance])
+            ax.invert_yaxis()  # labels read top-to-bottom
+            ax.set_xlabel('SHAP Value')
+            ax.set_title('Feature Impact on Prediction')
+            
+            # Add value labels on the bars
+            for i, v in enumerate(shap_values[1][0][feature_importance]):
+                ax.text(v, i, f' {v:.3f}', va='center')
+            
             st.pyplot(fig)
             plt.close(fig)
 
