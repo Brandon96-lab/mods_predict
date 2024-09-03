@@ -5,7 +5,6 @@ import streamlit as st
 import joblib
 import shap
 import matplotlib.pyplot as plt
-import streamlit.components.v1 as components
 
 # Set page config
 st.set_page_config(page_title="MODS Prediction in Trauma Patients with Sepsis", page_icon="🏥", layout="wide")
@@ -93,10 +92,13 @@ with col1:
             st.pyplot(fig)
             plt.close(fig)
 
-            # Create SHAP force plot using JavaScript visualization
+            # Create static SHAP force plot
             st.subheader("SHAP Force Plot")
-            shap_html = shap.force_plot(explainer.expected_value[1], shap_values[1][0], input_data.iloc[0], matplotlib=False, show=False)
-            components.html(shap_html.html(), height=300)
+            fig, ax = plt.subplots(figsize=(12, 3))
+            shap.plots._waterfall.waterfall_legacy(explainer.expected_value[1], shap_values[1][0], feature_names=input_data.columns, max_display=10, show=False)
+            plt.title("SHAP Force Plot")
+            st.pyplot(fig)
+            plt.close(fig)
 
 # Disclaimer (at the bottom)
 st.markdown("---")
