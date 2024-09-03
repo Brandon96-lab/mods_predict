@@ -41,8 +41,15 @@ st.title("🏥 Prediction of MODS in Trauma Patients with Sepsis")
 # Disclaimer
 st.warning("""
 **DISCLAIMER:**
-This model is intended for research purposes only. Its clinical applicability requires prospective validation. 
-Use caution when considering this for clinical decision-making. This tool is intended to complement, not replace, the expertise and judgment of healthcare professionals. 
+
+This online calculator is freely accessible and utilizes an advanced random forest algorithm for predicting Multiple Organ Dysfunction Syndrome (MODS) in trauma patients with sepsis. While the model has demonstrated good performance in validation studies, it is crucial to emphasize that this tool was developed solely for research purposes.
+
+Key points to consider:
+- The model's predictions should not be the sole basis for clinical decisions.
+- This tool is intended to complement, not replace, the expertise and judgment of healthcare professionals.
+- Clinical applicability requires further prospective validation.
+
+Remember: This AI platform is an aid to clinical decision-making, not a substitute for professional medical advice, diagnosis, or treatment.
 """)
 
 # Create two columns for layout
@@ -90,14 +97,9 @@ with col1:
             explainer = shap.TreeExplainer(model)
             shap_values = explainer.shap_values(input_data)
             
-            fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(10, 12))
-            shap.summary_plot(shap_values[1], input_data, plot_type="bar", show=False)
-            plt.sca(ax1)
-            plt.title("Feature Importance")
-            shap.force_plot(explainer.expected_value[1], shap_values[1][0], input_data.iloc[0], matplotlib=True, show=False)
-            plt.sca(ax2)
-            plt.title("SHAP Force Plot")
-            st.pyplot(fig)
+            # Original plot display
+            st.pyplot(shap.summary_plot(shap_values[1], input_data, plot_type="bar"))
+            st.pyplot(shap.force_plot(explainer.expected_value[1], shap_values[1][0], input_data.iloc[0], matplotlib=True))
 
 # Footer
 st.markdown("---")
