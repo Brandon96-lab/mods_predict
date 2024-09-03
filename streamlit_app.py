@@ -7,7 +7,7 @@ import shap
 # Load the model and training data
 @st.cache_resource
 def load_model():
-    return joblib.load('gramtot_rf_model.pkl')
+    return joblib.load('gramtot_rf_model.joblib')
 
 @st.cache_data
 def load_training_data():
