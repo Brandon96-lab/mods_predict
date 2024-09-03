@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st  
 import joblib  
 import shap
+import matplotlib.pyplot as plt
 
 # Load the model
 @st.cache_resource
