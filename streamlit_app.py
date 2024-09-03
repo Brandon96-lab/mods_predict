@@ -92,26 +92,24 @@ with col1:
             st.pyplot(fig)
             plt.close(fig)
 
-            # Create improved SHAP visualization
-            st.subheader("SHAP Feature Impact")
+            # Create optimized SHAP force plot
+            st.subheader("SHAP Force Plot")
             
-            # Sort features by absolute SHAP value
-            feature_names = input_data.columns
-            feature_importance = np.abs(shap_values[1][0]).argsort()
+            # Increase the figure size and DPI for better quality
+            fig, ax = plt.subplots(figsize=(12, 3), dpi=150)
             
-            fig, ax = plt.subplots(figsize=(10, 6), dpi=100)
-            y_pos = np.arange(len(feature_names))
-            ax.barh(y_pos, shap_values[1][0][feature_importance], align='center')
-            ax.set_yticks(y_pos)
-            ax.set_yticklabels([feature_names[i] for i in feature_importance])
-            ax.invert_yaxis()  # labels read top-to-bottom
-            ax.set_xlabel('SHAP Value')
-            ax.set_title('Feature Impact on Prediction')
+            # Use shap.plots.force() for a more modern and customizable force plot
+            shap.plots.force(shap_values[1][0], 
+                             feature_names=input_data.columns, 
+                             matplotlib=True, 
+                             show=False, 
+                             plot_cmap="RdBu")
             
-            # Add value labels on the bars
-            for i, v in enumerate(shap_values[1][0][feature_importance]):
-                ax.text(v, i, f' {v:.3f}', va='center')
+            # Customize the plot
+            plt.title("SHAP Force Plot", fontsize=14)
+            plt.tight_layout()
             
+            # Display the plot
             st.pyplot(fig)
             plt.close(fig)
 
